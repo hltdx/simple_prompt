@@ -12,7 +12,6 @@ class InvokeModel:
     def __init__(self, region=None, model_id=None, proxy_url=None, system_prompt_file=None, guardrail_id=None, guardrail_version=None, log_file=None):
         self.region = region
         self.model_id = model_id
-        self.model_version = model_version
         self.proxy_url = proxy_url
         self.system_prompt_file = system_prompt_file
         self.guardrail_id = guardrail_id
@@ -58,7 +57,6 @@ class InvokeModel:
                 self.__logger = logging.getLogger(__name__)
                 self.__logger.info("Starting conversation model")
                 self.__logger.info(f"Model: {self.model_id}")
-                self.__logger.info(f"Model version: {self.model_version}")
                 self.__logger.info(f"System prompt: {self.system_prompt}")
                 if self.guardrail_id:
                     self.__logger.info(f"Guardrail ID: {self.guardrail_id}")
