@@ -117,7 +117,7 @@ def main():
     parser = argparse.ArgumentParser(description="Simple prompt")
     parser.add_argument("region", help="AWS region")
     parser.add_argument("model_id", help="Model ID")
-    parser.add_argument("system_prompt", help="File containing the system prompt")
+    parser.add_argument("system_prompt_file", help="File containing the system prompt")
     parser.add_argument("--proxy_url", help="Proxy URL")
     parser.add_argument("--guardrail_id", help="Guardrail ID")
     parser.add_argument("--guardrail_version", help="Guardrail version")
