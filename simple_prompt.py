@@ -68,10 +68,9 @@ class InvokeModel:
     def prompt(self, input):
 
         native_request = {
-            "system": self.system_prompt,
             "max_tokens": 1024, 
             "temperature": 0.5,
-            "prompt": f"<s>[INST] {input} [/INST]",
+            "prompt": f"<s>[INST] {self.system_prompt} [/INST] {input} </s>",
             "top_p": 0.7,
             "top_k": 50,
         }
