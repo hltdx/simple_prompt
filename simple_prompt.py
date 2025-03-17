@@ -9,17 +9,18 @@ from botocore import exceptions
 
 class InvokeModel:
 
-    def __init__(self, region=None, model_id=None, model_version=None, proxy_url=None, system_prompt=None, guardrail_id=None, guardrail_version=None, log_file=None):
+    def __init__(self, region=None, model_id=None, proxy_url=None, system_prompt_file=None, guardrail_id=None, guardrail_version=None, log_file=None):
         self.region = region
         self.model_id = model_id
         self.model_version = model_version
         self.proxy_url = proxy_url
-        self.system_prompt = system_prompt
+        self.system_prompt_file = system_prompt_file
         self.guardrail_id = guardrail_id
         self.guardrail_version = guardrail_version
         self.log_file = log_file
         self.__bedrock_client = None
         self.__logger = None
+        self.__system_prompt = None
 
     @property
     def bedrock_client(self):
@@ -37,6 +38,13 @@ class InvokeModel:
                     region_name=self.region
                 )
         return self.__bedrock_client
+    
+    @property
+    def system_prompt(self):
+        if not self.__system_prompt:
+            with open(self.system_prompt_file, "r") as f:
+                self.__system_prompt = f.read()
+        return self.__system_prompt
     
     @property
     def logger(self):
@@ -63,15 +71,11 @@ class InvokeModel:
 
         native_request = {
             "system": self.system_prompt,
-            "anthropic_version": self.model_version,
             "max_tokens": 1024, 
             "temperature": 0.5,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [{"type": "text", "text": input}],
-                }
-            ]
+            "prompt": f"<s>[INST] {input} [/INST]",
+            "top_p": 0.7,
+            "top_k": 50,
         }
 
         request = json.dumps(native_request)
@@ -113,8 +117,7 @@ def main():
     parser = argparse.ArgumentParser(description="Simple prompt")
     parser.add_argument("region", help="AWS region")
     parser.add_argument("model_id", help="Model ID")
-    parser.add_argument("model_version", help="Model version")
-    parser.add_argument("system_prompt", help="System prompt")
+    parser.add_argument("system_prompt", help="File containing the system prompt")
     parser.add_argument("--proxy_url", help="Proxy URL")
     parser.add_argument("--guardrail_id", help="Guardrail ID")
     parser.add_argument("--guardrail_version", help="Guardrail version")
