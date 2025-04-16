@@ -70,7 +70,7 @@ class InvokeModel:
         native_request = {
             "max_tokens": 1024, 
             "temperature": 0.5,
-            "prompt": f"<s>[INST] {self.system_prompt} [/INST] {input} </s>",
+            "prompt": f"<s>[INST] {input} [/INST]</s>",
             "top_p": 0.7,
             "top_k": 50,
         }
@@ -90,7 +90,7 @@ class InvokeModel:
                     modelId=self.model_id,
                     body=request
                 )
-            model_response = json.loads(response["body"].read())["content"][0]["text"]
+            model_response = json.loads(response["body"].read())["outputs"][0]["text"]
             if self.logger:
                 self.logger.info(f"User prompt: {input}")
                 self.logger.info(f"Model response: {model_response}")
