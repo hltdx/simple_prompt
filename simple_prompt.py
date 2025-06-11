@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import sys, copy, json, argparse, logging
+import sys, json, argparse, logging
 import boto3
+import pandas as pd
 from botocore import UNSIGNED
 from botocore.config import Config
 from botocore import exceptions
@@ -148,11 +149,10 @@ def main():
     else:
         summary_report = {}
         try:
-            with open(args.prompts_file, "r") as f:
-                prompts = f.readlines()
-            for prompt in prompts:
-                prompt = prompt.strip()
-                prompt, label = prompt.split(",")
+            prompts_df = pd.read_csv(args.prompts_file)
+            for _, row in prompts_df.iterrows():
+                prompt = row['text']
+                label = row['label']
                 if not prompt:
                     continue
                 response = i.prompt(prompt)
