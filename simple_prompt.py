@@ -9,11 +9,10 @@ from botocore import exceptions
 
 class InvokeModel:
 
-    def __init__(self, region=None, model_id=None, proxy_url=None, system_prompt_file=None, guardrail_id=None, guardrail_version=None, log_file=None):
+    def __init__(self, region=None, model_id=None, proxy_url=None, guardrail_id=None, guardrail_version=None, log_file=None):
         self.region = region
         self.model_id = model_id
         self.proxy_url = proxy_url
-        self.system_prompt_file = system_prompt_file
         self.guardrail_id = guardrail_id
         self.guardrail_version = guardrail_version
         self.log_file = log_file
@@ -37,13 +36,6 @@ class InvokeModel:
                     region_name=self.region
                 )
         return self.__bedrock_client
-    
-    @property
-    def system_prompt(self):
-        if not self.__system_prompt:
-            with open(self.system_prompt_file, "r") as f:
-                self.__system_prompt = f.read()
-        return self.__system_prompt
     
     @property
     def logger(self):
@@ -114,7 +106,6 @@ def main():
     parser = argparse.ArgumentParser(description="Simple prompt")
     parser.add_argument("region", help="AWS region")
     parser.add_argument("model_id", help="Model ID")
-    parser.add_argument("system_prompt_file", help="File containing the system prompt")
     parser.add_argument("--proxy_url", help="Proxy URL")
     parser.add_argument("--guardrail_id", help="Guardrail ID")
     parser.add_argument("--guardrail_version", help="Guardrail version")
