@@ -9,7 +9,7 @@ from botocore import exceptions
 
 class InvokeModel:
 
-    def __init__(self, region=None, model_id=None, proxy_url=None, guardrail_id=None, guardrail_version=None, log_file=None):
+    def __init__(self, region=None, model_id=None, proxy_url=None, guardrail_id=None, guardrail_version=None, log_file=None, prompts_file=None, summary_report=None):
         self.region = region
         self.model_id = model_id
         self.proxy_url = proxy_url
@@ -128,10 +128,7 @@ def main():
         print("Log file is required for non-interactive mode.")
         sys.exit(1)
 
-    i_args = copy.deepcopy(args)
-    del i_args["prompts_file"]
-    del i_args["summary_report"]
-    i = InvokeModel(**vars(i_args))
+    i = InvokeModel(**vars(args))
 
     print(f"Starting conversation with model {args.model_id}")
     print("Press Ctrl+C to exit")
