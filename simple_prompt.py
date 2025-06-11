@@ -48,7 +48,6 @@ class InvokeModel:
                 self.__logger = logging.getLogger(__name__)
                 self.__logger.info("Starting conversation model")
                 self.__logger.info(f"Model: {self.model_id}")
-                self.__logger.info(f"System prompt: {self.system_prompt}")
                 if self.guardrail_id:
                     self.__logger.info(f"Guardrail ID: {self.guardrail_id}")
                     self.__logger.info(f"Guardrail version: {self.guardrail_version}")
@@ -131,9 +130,9 @@ def main():
     i = InvokeModel(**vars(args))
 
     print(f"Starting conversation with model {args.model_id}")
-    print("Press Ctrl+C to exit")
     
     if interactive_mode:
+        print("Press Ctrl+C to exit")
         while True:
             try:
                 user_input = None
