@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, json, argparse, logging
+import sys, copy, json, argparse, logging
 import boto3
 from botocore import UNSIGNED
 from botocore.config import Config
@@ -18,7 +18,6 @@ class InvokeModel:
         self.log_file = log_file
         self.__bedrock_client = None
         self.__logger = None
-        self.__system_prompt = None
 
     @property
     def bedrock_client(self):
@@ -129,7 +128,10 @@ def main():
         print("Log file is required for non-interactive mode.")
         sys.exit(1)
 
-    i = InvokeModel(**vars(args))
+    i_args = copy.deepcopy(args)
+    del i_args["prompts_file"]
+    del i_args["summary_report"]
+    i = InvokeModel(**vars(i_args))
 
     print(f"Starting conversation with model {args.model_id}")
     print("Press Ctrl+C to exit")
